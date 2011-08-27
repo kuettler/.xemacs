@@ -110,9 +110,9 @@ With arg, do it arg times."
   )
 
 (c-add-style "kde-c" '("stroustrup"
-		       (c-basic-offset . 4)
+		       (c-basic-offset . 2)
 		       (c-offsets-alist
-			(case-label . 4)
+			(case-label . 2)
 			(access-label . -)
 			(label . 0)
 			(statement-cont . c-lineup-math)
