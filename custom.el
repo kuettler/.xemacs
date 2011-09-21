@@ -5,6 +5,7 @@
  '(c-set-offset (quote substatement-open) t)
  '(column-number-mode t)
  '(fill-column 78)
+;; '(tab-width 2)
  '(font-lock-auto-fontify t)
  '(font-lock-maximum-decoration t)
  '(font-lock-maximum-size nil)

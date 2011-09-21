@@ -111,6 +111,7 @@ With arg, do it arg times."
 
 (c-add-style "kde-c" '("stroustrup"
 		       (c-basic-offset . 2)
+                       (tab-width . 2)
 		       (c-offsets-alist
 			(case-label . 2)
 			(access-label . -)
@@ -127,7 +128,7 @@ With arg, do it arg times."
 			 (if (not (eq kde-tab-behavior 'indent))
 			     (c-tab-always-indent . nil))
 					; (insert-tab-mode nil)
-			 (indent-tabs-mode . nil)
+			 (indent-tabs-mode . t)
 			 (if (eq kde-emacs-type 'xemacs)
 			     (fume-auto-rescan-buffer-p nil))
 			 (c-access-key . ,kde-access-labels)
