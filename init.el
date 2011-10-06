@@ -106,6 +106,7 @@
 (require 'cc-mode)
 
 (add-to-list 'auto-mode-alist '("\\.h\\'" . c++-mode))
+(add-to-list 'auto-mode-alist '("\\.ice\\'" . c++-mode))
 
 (defun lyx-c++-mode ()
   "C++ mode with adjusted defaults for use with LyX."
