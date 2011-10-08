@@ -147,6 +147,11 @@
 (define-key global-map [(control prior)] 'beginning-of-buffer)
 (define-key global-map [(control next)] 'end-of-buffer)
 
+(define-key global-map [(XF86Back)]            'pc-select-move-page-up)
+(define-key global-map [(XF86Forward)]         'pc-select-move-page-down)
+(define-key global-map [(control XF86Back)]    'pc-select-move-bob)
+(define-key global-map [(control XF86Forward)] 'pc-select-move-eob)
+
 ; kde-emacs-semantic :
 ; no binding for kde-license-insert; call it via M-x
 (when (featurep 'semantic)
