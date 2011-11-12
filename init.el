@@ -289,24 +289,69 @@ With arg, to it arg times."
 (defun set-frame-size-according-to-resolution ()
   (interactive)
   (if window-system
-	  (progn
-		;; use 120 char wide window for largeish displays and smaller 80
-		;; column windows for smaller displays pick whatever numbers make
-		;; sense for you
-		(if (> (x-display-pixel-width) 1600)
+	  ;; use 120 char wide window for largeish displays and smaller 80
+	  ;; column windows for smaller displays pick whatever numbers make
+	  ;; sense for you
+	  ;; for the height, subtract a couple hundred pixels from the screen
+	  ;; height (for panels, menubars and whatnot), then divide by the
+	  ;; height of a char to get the height we want
+	  (if (> (x-display-pixel-width) 1600)
+		  (progn
 			(add-to-list 'default-frame-alist (cons 'width 120))
-		  (add-to-list 'default-frame-alist (cons 'width 90)))
-		;; for the height, subtract a couple hundred pixels from the screen
-		;; height (for panels, menubars and whatnot), then divide by the
-		;; height of a char to get the height we want
-		(add-to-list 'default-frame-alist 
-					 (cons 'height (/ (- (x-display-pixel-height) 70)
-									  ;(frame-char-height)
-									  14
-									  )))
-		(add-to-list 'default-frame-alist 
-					 (cons 'top 10))
-		(setq initial-frame-alist '((left . 0)))
+			(add-to-list 'default-frame-alist 
+						 (cons 'height (/ (- (x-display-pixel-height) 70)
+										;(frame-char-height)
+										14
+										)))
+			(add-to-list 'default-frame-alist 
+						 (cons 'top 10))
+			;;(setq initial-frame-alist '((left . 1600)))
+			)
+		(progn
+		  (add-to-list 'default-frame-alist (cons 'width 90))
+		  (add-to-list 'default-frame-alist 
+					   (cons 'height (/ (- (x-display-pixel-height) 70)
+										;(frame-char-height)
+										14
+										)))
+		  (add-to-list 'default-frame-alist 
+					   (cons 'top 10))
+		  ;;(setq initial-frame-alist '((left . 0)))
+		  )
 		)))
 
 (set-frame-size-according-to-resolution)
+
+;;; https://www.bunkus.org/blog/2009/12/switching-identifier-naming-style-between-camel-case-and-c-style-in-emacs/
+(defun mo-toggle-identifier-naming-style ()
+  "Toggles the symbol at point between C-style naming,
+e.g. `hello_world_string', and camel case,
+e.g. `HelloWorldString'."
+  (interactive)
+  (let* ((symbol-pos (bounds-of-thing-at-point 'symbol))
+         case-fold-search symbol-at-point cstyle regexp func)
+    (unless symbol-pos
+      (error "No symbol at point"))
+    (save-excursion
+      (narrow-to-region (car symbol-pos) (cdr symbol-pos))
+      (setq cstyle (string-match "_" (buffer-string))
+            regexp (if cstyle
+					   "\\(?:\\_<\\|_\\)\\(\\w\\)"
+					 "\\([A-Z]\\)")
+            func (if cstyle
+                     'capitalize
+                   (lambda (s)
+                     (concat (if (= (match-beginning 1)
+                                    (car symbol-pos))
+                                 ""
+                               "_")
+                             (downcase s)))))
+      (goto-char (point-min))
+      (while (re-search-forward regexp nil t)
+        (replace-match (funcall func (match-string 1))
+                       t nil))
+      (widen))))
+
+(define-key c++-mode-map  "\es" 'mo-toggle-identifier-naming-style)
+(define-key c-mode-map  "\es" 'mo-toggle-identifier-naming-style)
+(define-key py-mode-map "\es" 'mo-toggle-identifier-naming-style)
